@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+/* Reset default margins and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.hero {
+    position: relative;
+    width: 100%;
+    /* Responsive height using viewport units */
+    height: 100vh;
+    /* Fallback for older browsers */
+    height: 100dvh;
+    overflow: hidden;
+    background: #f0f0f0;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 355px;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Responsive text sizing */
+    font-size: clamp(2rem, 5vw, 4rem);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+/* Background images with responsive sizing */
+.slide:nth-child(1) {
+    background: url('https://images.unsplash.com/photo-1735124283566-5f5707a40808?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8') center/cover no-repeat;
+}
+
+.slide:nth-child(2) {
+    background: url('https://images.unsplash.com/photo-1735149050406-76f49ced66e1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwzfHx8ZW58MHx8fHx8') center/cover no-repeat;
+}
+
+.slide:nth-child(3) {
+    background: url('https://images.unsplash.com/photo-1738193450396-31b212c006f9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMXx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat;
+}
+
+/* Optional content overlay */
+.slide-content {
+    position: relative;
+    z-index: 1;
+    max-width: min(90%, 1200px);
+    margin: 0 auto;
+}
+
+/* Media queries for different screen sizes */
+@media screen and (max-width: 768px) {
+    .hero {
+        /* Slightly shorter height on mobile */
+        height: 70vh;
+        height: 70dvh;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .slide {
+        /* Adjust padding for smaller screens */
+      /*  padding: 0.5rem; */
+    }
+}
+
+/* Handle landscape orientation on mobile */
+@media screen and (max-height: 480px) and (orientation: landscape) {
+    .hero {
+        height: 100vh;
+        height: 100dvh;
+    }
+}
+</style>
+</head>
+<body>
+<div class="hero">
+    <div class="slide">
+        <div class="slide-content"></div>
+    </div>
+    <div class="slide">
+        <div class="slide-content"></div>
+    </div>
+    <div class="slide">
+        <div class="slide-content"></div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
+    let slideInterval;
+
+    // Function to update slides
+    function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[index].classList.add('active');
+    }
+
+    // Show first slide initially
+    showSlide(currentSlide);
+
+    // Function for next slide
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    // Start slideshow
+    function startSlideshow() {
+        if (slideInterval) {
+            clearInterval(slideInterval);
+        }
+        slideInterval = setInterval(nextSlide, 4000);
+    }
+
+    // Handle visibility change to prevent background tab issues
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            clearInterval(slideInterval);
+        } else {
+            startSlideshow();
+        }
+    });
+
+    // Handle resize events
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            // Ensure current slide is properly displayed after resize
+            showSlide(currentSlide);
+        }, 250);
+    });
+
+    // Start the slideshow
+    startSlideshow();
+});
+</script>
+</body>
+</html>
