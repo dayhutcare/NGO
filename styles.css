@@ -405,7 +405,7 @@ body {
 .impact-card {
     text-align: center;
     padding: 2rem;
-    background-color: #f8fafc;
+    background-color: #c9c9c9;
     border-radius: 0.5rem;
     transition: transform 0.3s ease;
 }
